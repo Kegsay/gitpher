@@ -13,6 +13,11 @@ type FileFetcherJSONRequest struct {
 	FilePath string
 }
 
+// GitCommandJSONRequest The JSON format for incoming /git requests
+type GitCommandJSONRequest struct {
+	Args []string
+}
+
 func fileFetcher(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -43,6 +48,36 @@ func fileFetcher(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, contents)
 }
 
+func gitHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Must be POST")
+		return
+	}
+	decoder := json.NewDecoder(r.Body)
+	var gitRequest GitCommandJSONRequest
+	err := decoder.Decode(&gitRequest)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Request body not JSON")
+		return
+	}
+	if len(gitRequest.Args) == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "No 'args' specified")
+		return
+	}
+
+	fmt.Println("Executing ", gitRequest.Args)
+	result, err := RunGitCommand("", gitRequest.Args)
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+		fmt.Fprintf(w, "Problem executing command ", err)
+		return
+	}
+	fmt.Fprintf(w, result)
+}
+
 func main() {
 	fmt.Println("         ,_---~~~~~----._         ")
 	fmt.Println("  _,,_,*^____      _____``*g*\"*, ")
@@ -63,5 +98,6 @@ func main() {
 
 	fmt.Println("Listening on port", *port)
 	http.HandleFunc("/fetch", fileFetcher)
+	http.HandleFunc("/git", gitHandler)
 	http.ListenAndServe(":"+strconv.Itoa(*port), nil)
 }
