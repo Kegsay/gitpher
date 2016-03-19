@@ -15,5 +15,16 @@ This project is experimental, run at your own risk! The web server exposes raw `
 - Provide support for [Git Pull Review](https://github.com/Kegsay/github-pull-review) (GPR) clients.
 
 ## Where we're at
+ - [ ] Design a workspace for checking out and maintaining arbitrary git projects.
+ - [ ] Reach feature parity with [gitrust](https://github.com/illicitonion/gitrust), the current backend for GPR:
+    - [ ] Implement OAuth2 for Github
+    - [ ] `/squashmerge` API
+    - [ ] `/rewritehistory` API
  - [x] Proxy Github User Content requests to support GPR file expanding.
- - Reach feature parity with [gitrust](https://github.com/illicitonion/gitrust), the current backend for GPR.
+ - [ ] Implement and use a better diffing algorithm than `git diff`.
+
+### Stretch goals
+These goals work to replace GPRs dependence on Github. Its aim is to make Gitpher expose the same APIs as Github so clients can be pointed to Gitpher instead.
+ - [ ] Add a database layer which can store comments, pull requests, etc
+ - [ ] Support comments
+ - [ ] Support creation of pull requests
