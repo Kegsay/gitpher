@@ -5,11 +5,12 @@ import (
 	"net/http"
 )
 
-// The base URL to Github User Content
-const GithubUserContentUrl = "https://raw.githubusercontent.com/"
+// GithubUserContentURL The base URL to Github User Content
+const GithubUserContentURL = "https://raw.githubusercontent.com/"
 
+// GetGithubUserContent Fetch a raw file from Github.
 func GetGithubUserContent(contentPath string) (string, error) {
-	githubURL := GithubUserContentUrl + contentPath
+	githubURL := GithubUserContentURL + contentPath
 	response, err := http.Get(githubURL)
 	if err != nil {
 		return "", err

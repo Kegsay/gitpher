@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// The JSON format for incoming /fetch requests
+// FileFetcherJSONRequest The JSON format for incoming /fetch requests
 type FileFetcherJSONRequest struct {
 	FilePath string
 }
