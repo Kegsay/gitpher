@@ -5,11 +5,12 @@ import (
 	"net/http"
 )
 
-const GITHUB_URL = "https://raw.githubusercontent.com/"
+// The base URL to Github User Content
+const GithubUserContentUrl = "https://raw.githubusercontent.com/"
 
 func GetGithubUserContent(contentPath string) (string, error) {
-	githubUrl := GITHUB_URL + contentPath
-	response, err := http.Get(githubUrl)
+	githubURL := GithubUserContentUrl + contentPath
+	response, err := http.Get(githubURL)
 	if err != nil {
 		return "", err
 	}

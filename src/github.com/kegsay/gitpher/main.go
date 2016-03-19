@@ -6,7 +6,8 @@ import (
 	"net/http"
 )
 
-type FileFetcherJsonRequest struct {
+// The JSON format for incoming /fetch requests
+type FileFetcherJSONRequest struct {
 	FilePath string
 }
 
@@ -17,7 +18,7 @@ func fileFetcher(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	decoder := json.NewDecoder(r.Body)
-	var fileRequest FileFetcherJsonRequest
+	var fileRequest FileFetcherJSONRequest
 	err := decoder.Decode(&fileRequest)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
