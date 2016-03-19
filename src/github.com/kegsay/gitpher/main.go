@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 // FileFetcherJSONRequest The JSON format for incoming /fetch requests
@@ -54,7 +56,12 @@ func main() {
 	fmt.Println("  |                            |   ")
 	fmt.Println("   |                           |  ")
 	fmt.Println("              Gitpher")
+	fmt.Println()
 
+	port := flag.Int("port", 8080, "The port to listen on")
+	flag.Parse()
+
+	fmt.Println("Listening on port", *port)
 	http.HandleFunc("/fetch", fileFetcher)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+strconv.Itoa(*port), nil)
 }
