@@ -3,11 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
-
-const GITHUB_URL = "https://raw.githubusercontent.com/"
 
 type FileFetcherJsonRequest struct {
 	FilePath string
@@ -34,23 +31,13 @@ func fileFetcher(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Fetching ", fileRequest.FilePath)
-	githubUrl := GITHUB_URL + fileRequest.FilePath
-	response, err := http.Get(githubUrl)
+	contents, err := GetGithubUserContent(fileRequest.FilePath)
+
 	if err != nil {
 		w.WriteHeader(http.StatusBadGateway)
 		fmt.Fprintf(w, "Upstream github request failed")
-		return
 	}
-
-	defer response.Body.Close()
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadGateway)
-		fmt.Fprintf(w, "Failed to parse returned JSON")
-		return
-	}
-	fmt.Println("Returning : ", string(body))
-	fmt.Fprintf(w, string(body))
+	fmt.Fprintf(w, contents)
 }
 
 func main() {
