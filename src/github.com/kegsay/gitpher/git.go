@@ -4,8 +4,10 @@ import (
 	"os/exec"
 )
 
-// RunGitCommand Execute an arbitrary git command. The output is returned.
-func RunGitCommand(path string, args []string) (string, error) {
+// RunGitCommand executes an arbitrary git command.
+// The standard output is returned. Standard error is discarded.
+// Args should be argv[1:] to pass to git.
+func RunGitCommand(args []string) (string, error) {
 	result, err := exec.Command("git", args...).Output()
 	if err != nil {
 		return "", err
